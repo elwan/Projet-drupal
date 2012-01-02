@@ -1,0 +1,54 @@
+<?php
+//Créer un petit menu qui va gérer notre application
+function drupalsms_menu() {
+$items=array();
+
+$items['admin/drupalsms']= array(
+'title' => 'Drupal SMS',
+'description' => 'Push SMS service',
+'page callback' => 'drupal_get_form',
+'page arguments' => array ('drupalsms_send'),
+'access arguments' => array('drupalsms send '),
+);
+return $items;
+}
+
+//le formulaire pour recuper le numéro du destinataire et le texte a envoyé
+function drupalsms_send() {
+//Champ pour recuperer le Numero
+$form['user_num']=array(
+'#type' => 'textfield',
+'#title' => t('Numero'),
+'#description'  => 'Numero  du users',
+'#required' => TRUE,
+);
+//Champ Pour ecrire le message
+$form['texte_sms']=array(
+'#type' => 'textarea',
+'#title' => t('Message'),
+'#description' => 'Champ texte pour envoi du message',
+'#required' => TRUE,
+);
+
+//creer le boutton submit
+$form['envoi_sms']=array(
+'#type' => 'submit',
+'#value' => t('Envoi'),
+);
+return $form;
+}
+
+Function drupalsms_send_submit($form,&$form_state){
+//recuperer le Numero du formulaire
+$Num=$form_state['values']['user_num'];
+//recuper le texte a envoyer en remplaçant les espace par des ”+”
+$Text=str_replace(' ','+',$form_state['values']['texte_sms']);
+//definition du login et du password
+$login="tester";
+$pass="foobar";
+//envoi du message a partir de kannel
+$url="http://localhost:13013/cgi-bin/sendsms?username=$login&password=$pass&to=$Num&text=$Text";
+file($url);
+}
+
+?>

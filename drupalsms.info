@@ -1,0 +1,3 @@
+name = drupalsms
+description = push sms with drupal
+core = 6.22
